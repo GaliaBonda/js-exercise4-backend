@@ -1,0 +1,27 @@
+.container {
+  width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 18px;
+}
+
+.table-head {
+  border: 2px solid #a9a9a9;
+  padding: 10px;
+  text-transform: uppercase;
+  background-color: #e5e4e2;
+}
+
+.table-data {
+  border: 2px solid #a9a9a9;
+  padding: 10px;
+}
+
+.table-row:hover {
+  background-color: #adadad;
+}
