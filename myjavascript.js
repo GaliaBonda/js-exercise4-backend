@@ -116,7 +116,7 @@ const config1 = {
         { title: 'Фамилия', value: 'surname' },
         { title: 'Возраст', value: 'age' },
     ],
-    apiUrl: "http://mock-api.shpp.me/hbondar/users"
+    apiUrl: "https://mock-api.shpp.me/hbondar/users"
 };
 
 const users = [
