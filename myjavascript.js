@@ -49,9 +49,10 @@ function createTableHead(config, table, apiData) {
     let headTr = document.createElement('tr');
     tHead.appendChild(headTr);
     let counterTh = document.createElement('th');
-    let counterthText = document.createTextNode('№');
-    counterTh.appendChild(counterthText);
+    let counterThText = document.createTextNode('№');
+    counterTh.appendChild(counterThText);
     headTr.appendChild(counterTh);
+    //В таблице появится колонка "Действия" и в каждой строчке в этой колонке - кнопка красного цвета с текстом "Удалить".
     headTr.classList.add('table-head');
     if (apiData) {
         for (let key in apiData[0]) {
@@ -70,6 +71,10 @@ function createTableHead(config, table, apiData) {
             th.classList.add('table-head');
         }
     }
+    let buttonTh = document.createElement('th');
+    let buttonThText = document.createTextNode('Действия');
+    buttonTh.appendChild(buttonThText);
+    headTr.appendChild(buttonTh);
 
 }
 
@@ -88,6 +93,7 @@ function createTableBody(config, table, data, apiData) {
         counterTd.appendChild(counterTdText);
         counterTd.classList.add('table-data');
         counterTd.style.textAlign = "center";
+
         if (apiData) {
             for (let key in apiData[i]) {
                 let td = document.createElement('td');
@@ -105,7 +111,20 @@ function createTableBody(config, table, data, apiData) {
                 td.classList.add('table-data');
             }
         }
-
+        //В таблице появится колонка "Действия" и в каждой строчке в этой колонке - кнопка красного цвета с текстом "Удалить".
+        let buttonTd = document.createElement('td');
+        tr.appendChild(buttonTd);
+        let button = document.createElement('button');
+        let buttonText = document.createTextNode('Удалить');
+        button.appendChild(buttonText);
+        if (apiData) {
+            button.setAttribute('id', apiData[i]['id']);
+        } else {
+            button.setAttribute('id', users[i]['id']);
+        }
+        buttonTd.appendChild(button);
+        buttonTd.classList.add('table-data');
+        buttonTd.style.textAlign = "center";
     }
 }
 
@@ -125,3 +144,4 @@ const users = [
 ];
 
 DataTable(config1, users);
+
