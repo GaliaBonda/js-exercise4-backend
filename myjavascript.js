@@ -126,6 +126,7 @@ function createTableBody(config, table, data, apiData) {
         let buttonTd = document.createElement('td');
         tr.appendChild(buttonTd);
         let button = document.createElement('button');
+        button.classList.add('delete-btn');
         let buttonText = document.createTextNode('Удалить');
         button.appendChild(buttonText);
         if (apiData) {

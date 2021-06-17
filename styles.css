@@ -27,3 +27,14 @@
 .table-row:hover {
   background-color: #adadad;
 }
+
+.delete-btn {
+  padding: 5px;
+  width: 120px;
+}
+
+.delete-btn:hover {
+  background-color: red;
+  border-color: red;
+  color: white;
+}
