@@ -5,7 +5,7 @@ function DataTable(config, data) {
     if ('apiUrl' in config) {
         let url = config.apiUrl;
         let arrayData = [];
-        sendRequest(url)
+        getData(url)
             .then(data => {
                 for (let key in data.data) {
                     arrayData.push(data.data[key]);
@@ -22,9 +22,21 @@ function DataTable(config, data) {
 
 }
 
-async function sendRequest(url) {
+async function getData(url) {
     let response = await fetch(url);
     if (response.ok) {
+        return await response.json();
+    }
+    const error = await response.json();
+    const e = new Error('Something went wrong');
+    e.data = error;
+    throw e;
+}
+
+async function deleteData(url) {
+    let response = await fetch(url, { method: "DELETE" });
+    if (response.ok) {
+        window.location.reload();
         return await response.json();
     }
     const error = await response.json();
@@ -52,8 +64,7 @@ function createTableHead(config, table, apiData) {
     let counterThText = document.createTextNode('№');
     counterTh.appendChild(counterThText);
     headTr.appendChild(counterTh);
-    //В таблице появится колонка "Действия" и в каждой строчке в этой колонке - кнопка красного цвета с текстом "Удалить".
-    headTr.classList.add('table-head');
+    counterTh.classList.add('table-head');
     if (apiData) {
         for (let key in apiData[0]) {
             let th = document.createElement('th');
@@ -75,6 +86,7 @@ function createTableHead(config, table, apiData) {
     let buttonThText = document.createTextNode('Действия');
     buttonTh.appendChild(buttonThText);
     headTr.appendChild(buttonTh);
+    buttonTh.classList.add('table-head');
 
 }
 
@@ -111,7 +123,6 @@ function createTableBody(config, table, data, apiData) {
                 td.classList.add('table-data');
             }
         }
-        //В таблице появится колонка "Действия" и в каждой строчке в этой колонке - кнопка красного цвета с текстом "Удалить".
         let buttonTd = document.createElement('td');
         tr.appendChild(buttonTd);
         let button = document.createElement('button');
@@ -145,3 +156,10 @@ const users = [
 
 DataTable(config1, users);
 
+//document.addEventListener('click', e => console.log(e.target.id));
+
+
+document.addEventListener('click', e => {
+    //console.log(`https://mock-api.shpp.me/hbondar/users/${e.target.id}`);
+    deleteData(`https://mock-api.shpp.me/hbondar/users/${e.target.id}`);
+});
