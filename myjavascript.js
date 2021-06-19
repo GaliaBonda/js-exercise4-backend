@@ -12,8 +12,10 @@ function DataTable(config, data) {
                 }
                 createTableHead(config, table, arrayData);
                 createTableBody(config, table, data, arrayData);
+                createAddButton(table);
             })
             .catch(err => console.log(err));
+
     } else {
         createTableHead(config, table);
         createTableBody(config, table, data);
@@ -169,18 +171,28 @@ document.addEventListener('click', e => {
 // let usersTable = document.querySelector(config1.parent);
 // document.querySelector('.container').insertBefore(addBtn, usersTable);
 
-let addBtn = document.getElementById('addBtn');
-addBtn.onclick = () => {
-    let table = document.querySelector('.table');
-    let row = table.insertRow(1);
-    row.classList.add('table-row');
-    for (let i = 0; i < table.rows[0].cells.length; i++) {
-        let cell = row.insertCell();
-        cell.classList.add('table-data');
-        let cellInput = document.createElement('input');
-        cell.appendChild(cellInput);
-        cellInput.setAttribute('type', 'date');
-        // let cellText = document.createTextNode('New cell');
-        // cell.appendChild(cellText);
+function createAddButton(table) {
+    let addBtn = document.getElementById('addBtn');
+    addBtn.onclick = () => {
+        let row = table.insertRow(1);
+        row.classList.add('table-row');
+        for (let i = 0; i < table.rows[0].cells.length; i++) {
+            let cell = row.insertCell();
+            cell.classList.add('table-data');
+            if (i != 0 && i != table.rows[0].cells.length - 1) {
+                let cellInput = document.createElement('input');
+                cell.appendChild(cellInput);
+                //console.log(table.rows[1].cells[0].innerHTML);
+            }
+        }
     }
 }
+
+
+document.addEventListener('keyup', e => {
+    console.log(e.target.tagName === 'INPUT' && e.keyCode === 13);
+    // console.log(e.target);
+    // console.log(e.keyCode);
+});
+
+
