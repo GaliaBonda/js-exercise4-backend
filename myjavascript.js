@@ -182,6 +182,7 @@ function createAddButton(table) {
             if (i != 0 && i != table.rows[0].cells.length - 1) {
                 let cellInput = document.createElement('input');
                 cell.appendChild(cellInput);
+                cellInput.classList.add('input');
                 //console.log(table.rows[1].cells[0].innerHTML);
             }
         }
@@ -201,9 +202,12 @@ function checkInputFilling() {
     let allInputs = document.querySelectorAll('input');
     console.log(allInputs);
     allInputs.forEach(function (input) {
-        console.log("Input filling: " + input.value);
+        //console.log("Input filling: " + input.value);
         if (input.value === '') {
-            console.log('empty input');
+            //console.log('empty input');
+            input.classList.add('empty-input');
+        } else {
+            input.classList.remove('empty-input');
         }
     });
 }
