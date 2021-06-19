@@ -174,13 +174,13 @@ addBtn.onclick = () => {
     let table = document.querySelector('.table');
     let row = table.insertRow(1);
     row.classList.add('table-row');
-    //let cell = row.insertCell();
-    //cell.classList.add('table-data');
-    //console.log(table.rows[0].cells.length);
     for (let i = 0; i < table.rows[0].cells.length; i++) {
         let cell = row.insertCell();
         cell.classList.add('table-data');
-        let cellText = document.createTextNode('New cell');
-        cell.appendChild(cellText);
+        let cellInput = document.createElement('input');
+        cell.appendChild(cellInput);
+        cellInput.setAttribute('type', 'date');
+        // let cellText = document.createTextNode('New cell');
+        // cell.appendChild(cellText);
     }
 }
