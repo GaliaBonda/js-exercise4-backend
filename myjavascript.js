@@ -190,9 +190,20 @@ function createAddButton(table) {
 
 
 document.addEventListener('keyup', e => {
-    console.log(e.target.tagName === 'INPUT' && e.keyCode === 13);
-    // console.log(e.target);
-    // console.log(e.keyCode);
+    if (e.target.tagName === 'INPUT' && e.keyCode === 13) {
+        checkInputFilling();
+    }
+
 });
 
 
+function checkInputFilling() {
+    let allInputs = document.querySelectorAll('input');
+    console.log(allInputs);
+    allInputs.forEach(function (input) {
+        console.log("Input filling: " + input.value);
+        if (input.value === '') {
+            console.log('empty input');
+        }
+    });
+}
