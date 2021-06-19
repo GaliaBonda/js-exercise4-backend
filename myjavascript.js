@@ -157,10 +157,30 @@ const users = [
 
 DataTable(config1, users);
 
-//document.addEventListener('click', e => console.log(e.target.id));
-
-
 document.addEventListener('click', e => {
-    //console.log(`https://mock-api.shpp.me/hbondar/users/${e.target.id}`);
-    deleteData(`https://mock-api.shpp.me/hbondar/users/${e.target.id}`);
+    if (e.target.className == 'delete-btn') {
+        deleteData(`https://mock-api.shpp.me/hbondar/users/${e.target.id}`);
+    }
 });
+
+// let addBtn = document.createElement('button');
+// let addBtnText = document.createTextNode('Добавить');
+// addBtn.appendChild(addBtnText);
+// let usersTable = document.querySelector(config1.parent);
+// document.querySelector('.container').insertBefore(addBtn, usersTable);
+
+let addBtn = document.getElementById('addBtn');
+addBtn.onclick = () => {
+    let table = document.querySelector('.table');
+    let row = table.insertRow(1);
+    row.classList.add('table-row');
+    //let cell = row.insertCell();
+    //cell.classList.add('table-data');
+    //console.log(table.rows[0].cells.length);
+    for (let i = 0; i < table.rows[0].cells.length; i++) {
+        let cell = row.insertCell();
+        cell.classList.add('table-data');
+        let cellText = document.createTextNode('New cell');
+        cell.appendChild(cellText);
+    }
+}
