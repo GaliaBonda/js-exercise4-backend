@@ -174,18 +174,24 @@ document.addEventListener('click', e => {
 function createAddButton(table) {
     let addBtn = document.getElementById('addBtn');
     addBtn.onclick = () => {
-        let row = table.insertRow(1);
-        row.classList.add('table-row');
-        for (let i = 0; i < table.rows[0].cells.length; i++) {
-            let cell = row.insertCell();
-            cell.classList.add('table-data');
-            if (i != 0 && i != table.rows[0].cells.length - 1 && i != table.rows[0].cells.length - 2) {
-                let cellInput = document.createElement('input');
-                cell.appendChild(cellInput);
-                cellInput.classList.add('input');
-                cellInput.setAttribute('id', table.tHead.rows[0].cells[i].innerHTML);
+        //console.log(table.rows[1].cells[0].innerHTML);
+        if (table.rows[1].cells[0].innerHTML) {
+            let row = table.insertRow(1);
+            row.classList.add('table-row');
+            for (let i = 0; i < table.rows[0].cells.length; i++) {
+                let cell = row.insertCell();
+                cell.classList.add('table-data');
+                if (i != 0 && i != table.rows[0].cells.length - 1 && i != table.rows[0].cells.length - 2) {
+                    let cellInput = document.createElement('input');
+                    cell.appendChild(cellInput);
+                    cellInput.classList.add('input');
+                    cellInput.setAttribute('id', table.tHead.rows[0].cells[i].innerHTML);
+                }
             }
+        } else {
+            alert('Please, fill the data');
         }
+
     }
 }
 
