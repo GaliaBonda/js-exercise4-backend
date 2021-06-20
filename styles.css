@@ -56,4 +56,5 @@
 
 .empty-input {
   background-color: red;
+  border-color: red;
 }

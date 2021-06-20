@@ -179,11 +179,11 @@ function createAddButton(table) {
         for (let i = 0; i < table.rows[0].cells.length; i++) {
             let cell = row.insertCell();
             cell.classList.add('table-data');
-            if (i != 0 && i != table.rows[0].cells.length - 1) {
+            if (i != 0 && i != table.rows[0].cells.length - 1 && i != table.rows[0].cells.length - 2) {
                 let cellInput = document.createElement('input');
                 cell.appendChild(cellInput);
                 cellInput.classList.add('input');
-                //console.log(table.rows[1].cells[0].innerHTML);
+                cellInput.setAttribute('id', table.tHead.rows[0].cells[i].innerHTML);
             }
         }
     }
@@ -191,23 +191,69 @@ function createAddButton(table) {
 
 
 document.addEventListener('keyup', e => {
-    if (e.target.tagName === 'INPUT' && e.keyCode === 13) {
-        checkInputFilling();
+    if (e.target.tagName === 'INPUT' && e.keyCode === 13 && checkInputFilling()) {
+        let data = getUserInfo();
+        postData(config1.apiUrl, data);
     }
-
 });
+
+async function postData(url, data) {
+    let response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+    console.log(response.ok);
+    if (response.ok) {
+        window.location.reload();
+        return await response.json();
+    }
+    const error = await response.json();
+    const e = new Error('Something went wrong');
+    e.data = error;
+    throw e;
+}
+
+
+
+
+function getUserInfo() {
+    let table = document.querySelector('.table');
+    let userInfo = {};
+    for (let i = 1; i < table.tHead.rows[0].cells.length - 2; i++) {
+        //console.log(table.tHead.rows[0].cells[i].innerHTML);
+        let input = document.getElementById(table.tHead.rows[0].cells[i].innerHTML);
+        //console.log(input.value);
+        userInfo[table.tHead.rows[0].cells[i].innerHTML] = input.value;
+    }
+    //console.log(table.rows[0].cells.length);
+    userInfo.id = +table.rows[table.rows.length - 1].cells[table.rows[0].cells.length - 2].innerHTML + 1;
+    //console.log(+table.rows[table.rows.length - 1].cells[table.rows[0].cells.length - 2].innerHTML + 1);
+    //console.length(table.rows[table.rows.length - 1].cells[table.rows[0].cells.length - 2]);
+    return userInfo;
+
+    //console.log(table.tHead.rows[0].cells[0].innerHTML);
+}
 
 
 function checkInputFilling() {
     let allInputs = document.querySelectorAll('input');
-    console.log(allInputs);
+    //console.log(allInputs);
+    let inputesAreFilled = true;
     allInputs.forEach(function (input) {
         //console.log("Input filling: " + input.value);
         if (input.value === '') {
             //console.log('empty input');
             input.classList.add('empty-input');
+            inputesAreFilled = false;
+            //addUser
         } else {
             input.classList.remove('empty-input');
         }
     });
+    //console.log(inputesAreFilled);
+    return inputesAreFilled;
 }
+
+//deleteData(`https://mock-api.shpp.me/hbondar/users/44`);
+// deleteData(`https://mock-api.shpp.me/hbondar/users/45`);
