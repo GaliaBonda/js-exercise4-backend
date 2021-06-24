@@ -20,8 +20,6 @@ function DataTable(config, data) {
         createTableHead(config, table);
         createTableBody(config, table, data);
     }
-
-
 }
 
 async function getData(url) {
@@ -165,16 +163,10 @@ document.addEventListener('click', e => {
     }
 });
 
-// let addBtn = document.createElement('button');
-// let addBtnText = document.createTextNode('Добавить');
-// addBtn.appendChild(addBtnText);
-// let usersTable = document.querySelector(config1.parent);
-// document.querySelector('.container').insertBefore(addBtn, usersTable);
 
 function createAddButton(table) {
     let addBtn = document.getElementById('addBtn');
     addBtn.onclick = () => {
-        //console.log(table.rows[1].cells[0].innerHTML);
         if (table.rows[1].cells[0].innerHTML) {
             let row = table.insertRow(1);
             row.classList.add('table-row');
@@ -220,46 +212,28 @@ async function postData(url, data) {
     throw e;
 }
 
-
-
-
 function getUserInfo() {
     let table = document.querySelector('.table');
     let userInfo = {};
     for (let i = 1; i < table.tHead.rows[0].cells.length - 2; i++) {
-        //console.log(table.tHead.rows[0].cells[i].innerHTML);
         let input = document.getElementById(table.tHead.rows[0].cells[i].innerHTML);
-        //console.log(input.value);
         userInfo[table.tHead.rows[0].cells[i].innerHTML] = input.value;
     }
-    //console.log(table.rows[0].cells.length);
     userInfo.id = +table.rows[table.rows.length - 1].cells[table.rows[0].cells.length - 2].innerHTML + 1;
-    //console.log(+table.rows[table.rows.length - 1].cells[table.rows[0].cells.length - 2].innerHTML + 1);
-    //console.length(table.rows[table.rows.length - 1].cells[table.rows[0].cells.length - 2]);
     return userInfo;
-
-    //console.log(table.tHead.rows[0].cells[0].innerHTML);
 }
 
 
 function checkInputFilling() {
     let allInputs = document.querySelectorAll('input');
-    //console.log(allInputs);
     let inputesAreFilled = true;
     allInputs.forEach(function (input) {
-        //console.log("Input filling: " + input.value);
         if (input.value === '') {
-            //console.log('empty input');
             input.classList.add('empty-input');
             inputesAreFilled = false;
-            //addUser
         } else {
             input.classList.remove('empty-input');
         }
     });
-    //console.log(inputesAreFilled);
     return inputesAreFilled;
 }
-
-//deleteData(`https://mock-api.shpp.me/hbondar/users/44`);
-// deleteData(`https://mock-api.shpp.me/hbondar/users/45`);
