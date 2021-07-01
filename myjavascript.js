@@ -12,7 +12,12 @@ function DataTable(config, data) {
                 }
                 createTableHead(config, table, arrayData);
                 createTableBody(config, table, data, arrayData);
-                createAddButton(table);
+                let menu = document.createElement('div');
+                document.getElementById('usersTable').insertBefore(menu, table);
+                menu.classList.add('table-menu');
+
+                createAddButton(table, menu);
+                createSearchField(table, menu);
             })
             .catch(err => console.log(err));
 
@@ -27,10 +32,7 @@ async function getData(url) {
     if (response.ok) {
         return await response.json();
     }
-    const error = await response.json();
-    const e = new Error('Something went wrong');
-    e.data = error;
-    throw e;
+    console.log('Something went wrong');
 }
 
 async function deleteData(url) {
@@ -39,10 +41,7 @@ async function deleteData(url) {
         window.location.reload();
         return await response.json();
     }
-    const error = await response.json();
-    const e = new Error('Something went wrong');
-    e.data = error;
-    throw e;
+    console.log('Something went wrong');
 }
 
 
@@ -60,25 +59,16 @@ function createTableHead(config, table, apiData) {
     table.appendChild(tHead);
     let headTr = document.createElement('tr');
     tHead.appendChild(headTr);
-    let counterTh = document.createElement('th');
-    let counterThText = document.createTextNode('№');
-    counterTh.appendChild(counterThText);
-    headTr.appendChild(counterTh);
+    let counterTh = createCell('th', '№', headTr);
     counterTh.classList.add('table-head');
     if (apiData) {
         for (let key in apiData[0]) {
-            let th = document.createElement('th');
-            let thText = document.createTextNode(key);
-            th.appendChild(thText);
-            headTr.appendChild(th);
+            let th = createCell('th', key, headTr);
             th.classList.add('table-head');
         }
     } else {
         for (let i = 0; i < config.columns.length; i++) {
-            let th = document.createElement('th');
-            let thText = document.createTextNode(config.columns[i].title);
-            th.appendChild(thText);
-            headTr.appendChild(th);
+            let th = createCell('th', config.columns[i].title, headTr);
             th.classList.add('table-head');
         }
     }
@@ -90,6 +80,14 @@ function createTableHead(config, table, apiData) {
 
 }
 
+function createCell(cellType, text, parent) {
+    let cell = document.createElement(cellType);
+    let innerText = document.createTextNode(text);
+    cell.appendChild(innerText);
+    parent.appendChild(cell);
+    return cell;
+}
+
 function createTableBody(config, table, data, apiData) {
     let tBody = document.createElement('tbody');
     table.appendChild(tBody);
@@ -99,27 +97,17 @@ function createTableBody(config, table, data, apiData) {
         let tr = document.createElement('tr');
         tBody.appendChild(tr);
         tr.classList.add('table-row');
-        let counterTd = document.createElement('td');
-        tr.appendChild(counterTd);
-        let counterTdText = document.createTextNode(++counter);
-        counterTd.appendChild(counterTdText);
+        let counterTd = createCell('td', ++counter, tr);
         counterTd.classList.add('table-data');
         counterTd.style.textAlign = "center";
-
         if (apiData) {
             for (let key in apiData[i]) {
-                let td = document.createElement('td');
-                let tdText = document.createTextNode(apiData[i][key]);
-                td.appendChild(tdText)
-                tr.appendChild(td);
+                let td = createCell('td', apiData[i][key], tr);
                 td.classList.add('table-data');
             }
         } else {
             for (let j = 0; j < config.columns.length; j++) {
-                let td = document.createElement('td');
-                let tdText = document.createTextNode(users[i][config.columns[j].value]);
-                td.appendChild(tdText)
-                tr.appendChild(td);
+                let td = createCell('td', users[i][config.columns[j].value], tr)
                 td.classList.add('table-data');
             }
         }
@@ -164,8 +152,11 @@ document.addEventListener('click', e => {
 });
 
 
-function createAddButton(table) {
-    let addBtn = document.getElementById('addBtn');
+function createAddButton(table, block) {
+    let addBtn = document.createElement('button');
+    addBtn.appendChild(document.createTextNode('Добавить новую запись'));
+    block.appendChild(addBtn);
+    addBtn.classList.add('add-btn');
     addBtn.onclick = () => {
         if (table.rows[1].cells[0].innerHTML) {
             let row = table.insertRow(1);
@@ -187,6 +178,37 @@ function createAddButton(table) {
     }
 }
 
+function createSearchField(table, block) {
+    let searchField = document.createElement("input");
+    searchField.setAttribute("type", "text");
+    searchField.setAttribute("placeholder", "Поиск");
+    block.appendChild(searchField);
+    searchField.classList.add('search');
+    let rows = [];
+    let cellString = '';
+    for (let i = 0; i < table.rows.length; i++) {
+        let cells = table.rows[i].cells;
+
+        for (let j = 0; j < cells.length - 1; j++) {
+            cellString = cellString + ' ' + cells[j].innerHTML;
+
+        }
+        rows.push(cellString.toLowerCase());
+        cellString = '';
+    }
+    searchField.oninput = () => {
+        for (let i = 0; i < rows.length; i++) {
+            if (!rows[i].includes(searchField.value)) {
+                table.rows[i].classList.add('row-hide');
+            } else {
+                table.rows[i].classList.remove('row-hide');
+            }
+        }
+
+    }
+
+}
+
 
 document.addEventListener('keyup', e => {
     if (e.target.tagName === 'INPUT' && e.keyCode === 13 && checkInputFilling()) {
@@ -206,10 +228,7 @@ async function postData(url, data) {
         window.location.reload();
         return await response.json();
     }
-    const error = await response.json();
-    const e = new Error('Something went wrong');
-    e.data = error;
-    throw e;
+    console.log('Something went wrong');
 }
 
 function getUserInfo() {

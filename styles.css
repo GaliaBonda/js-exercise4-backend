@@ -54,7 +54,24 @@
   height: 30px;
 }
 
+.search {
+  height: 50px;
+  width: 400px;
+  display: block;
+  padding: 5px;
+}
+
 .empty-input {
   background-color: red;
   border-color: red;
+}
+
+.table-menu {
+  display: flex;
+  justify-content: start;
+  column-gap: 30px;
+}
+
+.row-hide {
+  display: none;
 }
