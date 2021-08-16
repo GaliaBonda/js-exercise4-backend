@@ -113,7 +113,7 @@ function createTableBody(config, table, data, apiData) {
                     td.classList.add('table-data');
                     if (key === 'birthday') {
                         const birthDate = new Date(td.innerHTML);
-                        td.innerHTML = `${birthDate.getDate()}/${birthDate.getMonth()}/${birthDate.getFullYear()}`;
+                        td.innerHTML = `${birthDate.getDate()}/${birthDate.getMonth() + 1}/${birthDate.getFullYear()}`;
                     }
                 }
             }
