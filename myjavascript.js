@@ -8,8 +8,12 @@ function DataTable(config, data) {
         getData(url)
             .then(data => {
                 for (let key in data.data) {
-                    arrayData.push(data.data[key]);
+                    arrayData.push(data.data[key]);//shit happens here
+                    //need key here
+                    data.data[key]['datakey'] = key;
+
                 }
+                console.log(arrayData);
                 createTableHead(config, table, arrayData);
                 createTableBody(config, table, data, arrayData);
                 let menu = document.createElement('div');
@@ -63,9 +67,12 @@ function createTableHead(config, table, apiData) {
     counterTh.classList.add('table-head');
     if (apiData) {
         for (let key in apiData[0]) {
-            let th = createCell('th', key, headTr);
-            th.classList.add('table-head');
+            if (key !== 'datakey') {
+                let th = createCell('th', key, headTr);
+                th.classList.add('table-head');
+            }
         }
+
     } else {
         for (let i = 0; i < config.columns.length; i++) {
             let th = createCell('th', config.columns[i].title, headTr);
@@ -102,8 +109,11 @@ function createTableBody(config, table, data, apiData) {
         counterTd.style.textAlign = "center";
         if (apiData) {
             for (let key in apiData[i]) {
-                let td = createCell('td', apiData[i][key], tr);
-                td.classList.add('table-data');
+                if (key !== 'id') {
+                    let td = createCell('td', apiData[i][key], tr);
+                    td.classList.add('table-data');
+                }
+
             }
         } else {
             for (let j = 0; j < config.columns.length; j++) {
@@ -118,7 +128,8 @@ function createTableBody(config, table, data, apiData) {
         let buttonText = document.createTextNode('Удалить');
         button.appendChild(buttonText);
         if (apiData) {
-            button.setAttribute('id', apiData[i]['id']);
+            //button.setAttribute('id', apiData[i]['datakey']); //and here
+            button.setAttribute('data-id', apiData[i]['datakey']);
         } else {
             button.setAttribute('id', users[i]['id']);
         }
@@ -147,7 +158,11 @@ DataTable(config1, users);
 
 document.addEventListener('click', e => {
     if (e.target.className == 'delete-btn') {
-        deleteData(`https://mock-api.shpp.me/hbondar/users/${e.target.id}`);
+        //console.log(e.target.getAttribute('data-id'));
+        if (confirm("Удалить запись?")) {
+            deleteData(`https://mock-api.shpp.me/hbondar/users/${e.target.getAttribute('data-id')}`); //take data-id instead
+        }
+
     }
 });
 
@@ -158,6 +173,7 @@ function createAddButton(table, block) {
     block.appendChild(addBtn);
     addBtn.classList.add('add-btn');
     addBtn.onclick = () => {
+        //console.log(table.rows[table.rows.length - 1].cells[table.rows[0].cells.length - 1].firstChild.getAttribute('id'));
         if (table.rows[1].cells[0].innerHTML) {
             let row = table.insertRow(1);
             row.classList.add('table-row');
@@ -238,7 +254,10 @@ function getUserInfo() {
         let input = document.getElementById(table.tHead.rows[0].cells[i].innerHTML);
         userInfo[table.tHead.rows[0].cells[i].innerHTML] = input.value;
     }
-    userInfo.id = +table.rows[table.rows.length - 1].cells[table.rows[0].cells.length - 2].innerHTML + 1;
+    userInfo.id = +table.rows[table.rows.length - 1].cells[table.rows[0].cells.length - 1].firstChild.getAttribute('data-id') + 1;//here
+    //userInfo.id = table.rows[table.rows.length - 1].cells[table.rows[0].cells.length - 1]
+    //console.log(table.rows[table.rows.length - 1].cells[table.rows[0].cells.length - 1]);
+    //add datakey as attribute of row
     return userInfo;
 }
 
@@ -247,7 +266,7 @@ function checkInputFilling() {
     let allInputs = document.querySelectorAll('input');
     let inputesAreFilled = true;
     allInputs.forEach(function (input) {
-        if (input.value === '') {
+        if (input.value === '' && !input.classList.contains('search')) {
             input.classList.add('empty-input');
             inputesAreFilled = false;
         } else {
